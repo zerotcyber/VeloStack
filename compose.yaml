@@ -1,0 +1,19 @@
+# A declarative yaml file for defining and running velostack image
+
+
+services: 
+  fastapi:                     # The name of the the service box 
+    build: .                   # Build the container from the image in my current working directory.
+    container_name: velostack-api   # Permanent human-readable container name 
+    restart: unless-stopped         # Restart policy 
+    ports:
+      - "8000:8000"            # Connect host port to container port.
+    env_file:
+      - .env                   # Injects env variables at runtime
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    
+
